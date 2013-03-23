@@ -3,31 +3,51 @@
 
 (function($) {
 	if($ === false) {
-		console.log('ipman needs jQuery');
+		console.log('ipman needs jQuery or Zepto');
 		return;
 	}
 
-	var sources = {
-		
-		jesus: {
-			src: 'http://hipsterjesus.com/api/',
-			pre: function(d, next) {
-				//...
-				next(this.src, params);
-			}
+	var Plain = {
+		src: 'http://loripsum.net/api/',
+		pre: function(params, next) {
+			var pathOptions = [];
+			pathOptions.push(params.paragraph || false)
+			pathOptions.push(params.length || false)
+			pathOptions.push(params.decorate || false)
+
+			pathOptions = this.compact(pathOptions);
+
+			var setup = {}
+
+			next(this.src+pathOptions.join('/'), setup, this.res);
+		}, 
+		res: function(ipsums, next) {
+			next(ipsums);
+		},
+		compact: function(actual){
+  			var newArray = new Array();
+  			for(var i = 0; i<actual.length; i++){
+      			if (actual[i]){
+        			newArray.push(actual[i]);
+    			}
+  			}
+  			return newArray;
 		}
 	}
 
-	defaultSource = src['plain'];
+	var recipes = { 'plain': Plain }, defaultSource = recipes['plain'], defaultParams = {
+		paragraph: 1,
+		length: 'medium'
+	};
 
 	function option(name, that, params) {
-		return $(that).data(name) || params[name] || defaults[name];
+		return $(that).data(name) || params[name] || defaultParams[name] || false;
 	}
 
 	$.fn.ipman = function(src, opt) {
 		// this will do anything but configure
-		src = src || plain
-		opt = opt || {};
+		var src = typeof src == 'string'? src : defaultSource
+		var opt = opt || defaultParams
 
 		return this.each(function() {
 
@@ -38,7 +58,7 @@
 				sentence: option('para', $this, opt)
 			});
 
-			sources[src].pre(settings, function(path, data, read) {
+			src['pre'](settings, function(path, data, read) {
 				$.get(path, data, function(res) {
 					if(res) {
 						read(res || function(res, next) {
@@ -73,8 +93,15 @@
 		
 	}
 
+	// auto-setup
+	$('.ipman').ipman();
 
-})(jQuery || false)
-
-// auto-setup
-$('.ipman').ipman();
+})((function() {
+	if(typeof jQuery != 'undefined') {
+		return jQuery;
+	} else if (typeof Zepto != 'undefined') {
+		return Zepto;
+	} else {
+		return false;
+	}
+})())
