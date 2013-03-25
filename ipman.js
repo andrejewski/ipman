@@ -73,7 +73,7 @@
 		})
 	}
 
-	$.fn.ipman_ = function(src, obj) {
+	$.ipman_ = function(src, obj) {
 		// this will not do anything but configure
 		if(typeof obj == 'object') {
 			if(sources[src]) {
