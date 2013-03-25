@@ -124,4 +124,12 @@ This is my first OSS project. Ipsum has always killed my development/design cycl
 
 If you would like to complain or make a personal attack, tweet me [@compooter][1].
 
+## legal(ize it!)
+
+Disclaimer: I am not a lawyer.
+I am not responsible for any use of any website that hosts any form of API that is used by ipman and/or its modules (recipes). If you don't want your API listed with its recipe and endpoint, [email][2], [twitter][1].
+
+And about the licencing, there is no licence (in fact I hate the word). This software is free, I won't come after you for using it ever. 
+
 [1]: http://twitter.com/compooter
+[2]: mailto:chrisishereladies.chris@gmail.com
